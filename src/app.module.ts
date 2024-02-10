@@ -4,12 +4,12 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
-import { ClientModule } from './clients/client.module';
+import { ClientModule } from './modules/clients/client.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { join } from 'path';
 import { PagerMiddleware } from './shared/middleware/pager.middleware';
-import { ORMQuerySymbolBuilder } from './shared/typeorm/orm-query-builder';
+import { ORMQuerySymbolBuilder } from './shared/typeorm/orm-query-symbol-builder';
 
 const ENV = process.env.NODE_ENV;
 
@@ -43,6 +43,6 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(PagerMiddleware)
-      .forRoutes({ path: '/client/*', method: RequestMethod.GET });
+      .forRoutes({ path: '/clients/*', method: RequestMethod.GET });
   }
 }

@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import Client from '../../domain/entities/client.entity';
-import { Either, left, right } from '../../../shared/either';
+import { Either, left, right } from '../../../../shared/either';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AbstractRepository } from 'src/shared/abstract-repository';
+import { AbstractRepository } from '../../../../shared/abstract-repository';
 import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
-import { ClientFilter } from 'src/clients/domain/filter/client-filter';
-import { IQuerySymbolBuilder, IRepository } from 'src/shared/interfaces';
+import { ClientFilter } from '../../../clients/domain/filter/client-filter';
+import { IQueryBuilder, IRepository } from '../../../../shared/interfaces';
 
 @Injectable()
 export default class ClientRepositoryTypeORM
@@ -16,8 +16,8 @@ export default class ClientRepositoryTypeORM
   constructor(
     @InjectRepository(Client)
     private readonly clientRepository: Repository<Client>,
-    @Inject('IQuerySymbolBuilder')
-    private readonly querySymbolBuilder: IQuerySymbolBuilder,
+    @Inject('QueryBuilder')
+    private readonly ormQueryBuilder: IQueryBuilder,
   ) {
     super(clientRepository);
   }
@@ -34,9 +34,7 @@ export default class ClientRepositoryTypeORM
     Either<Error, EntityClassOrSchema[] | [EntityClassOrSchema[], number]>
   > {
     const clients = await this.findAll(
-      {
-        where: { name: this.querySymbolBuilder.like(clientFilter.name) },
-      },
+      this.ormQueryBuilder.buildGetAllQuery(clientFilter),
       clientFilter.pagination,
     );
     if (!clients) return left(Error('Erro na busca'));

@@ -1,5 +1,4 @@
 import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
-import { ClientFilter } from 'src/clients/domain/filter/client-filter';
 import { Either } from './either';
 
 export interface HttpResponse {
@@ -15,9 +14,13 @@ export interface IQuerySymbolBuilder {
   like(value);
 }
 
+export interface IQueryBuilder {
+  buildGetAllQuery(filters?: any);
+}
+
 export interface IRepository {
   getAll(
-    filters?: ClientFilter,
+    filters?: any,
   ): Promise<
     Either<Error, EntityClassOrSchema[] | [EntityClassOrSchema[], number]>
   >;

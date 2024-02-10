@@ -5,18 +5,22 @@ import ClientRepositoryTypeORM from './adapter/repository/client-repository-type
 import { TypeOrmModule } from '@nestjs/typeorm';
 import Client from './domain/entities/client.entity';
 import { CreateClientUseCase } from './application/create-client-use-case';
-import { IRepository } from 'src/shared/interfaces';
-import { ORMQuerySymbolBuilder } from 'src/shared/typeorm/orm-query-builder';
+import { IRepository } from '../../shared/interfaces';
+import { ORMQuerySymbolBuilder } from '../../shared/typeorm/orm-query-symbol-builder';
+import { ORMQueryBuilder } from '../../shared/typeorm/orm-query-builder';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Client, ClientRepositoryTypeORM])],
+  imports: [TypeOrmModule.forFeature([Client])],
   controllers: [ClientsController],
   providers: [
-    ORMQuerySymbolBuilder,
     ClientRepositoryTypeORM,
     {
-      provide: 'IQuerySymbolBuilder',
+      provide: 'QuerySymbolBuilder',
       useClass: ORMQuerySymbolBuilder,
+    },
+    {
+      provide: 'QueryBuilder',
+      useClass: ORMQueryBuilder,
     },
     {
       provide: FindAllClientsUseCase,

@@ -1,4 +1,4 @@
-import { ClientFilter } from 'src/clients/domain/filter/client-filter';
+import { ClientFilter } from '../clients/domain/filter/client-filter';
 import { FindAllClientsUseCase } from './application/find-all-clients-use-case';
 import {
   Body,
@@ -8,16 +8,16 @@ import {
   Query,
   UseInterceptors,
 } from '@nestjs/common';
-import { badRequest, ok, serverError } from '../helpers/http-helper';
-import { HttpResponse } from '../shared/interfaces';
+import { badRequest, ok, serverError } from '../../helpers/http-helper';
+import { HttpResponse } from '../../shared/interfaces';
 import { CreateClientUseCase } from './application/create-client-use-case';
 import { CreateClientDto } from './domain/dto/cliente-dto';
 import { plainToClass } from 'class-transformer';
 import Client from './domain/entities/client.entity';
-import { Pagination } from 'src/shared/pagination';
-import { PagerInterceptor } from 'src/shared/interceptors/pager.interceptor';
+import { Pagination } from '../../shared/pagination';
+import { PagerInterceptor } from '../../shared/interceptors/pager.interceptor';
 
-@Controller('client')
+@Controller('clients')
 export class ClientsController {
   constructor(
     private findAllClientsUseCase: FindAllClientsUseCase,

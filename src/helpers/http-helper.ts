@@ -1,4 +1,4 @@
-import { HttpResponse } from 'src/shared/interfaces';
+import { HttpResponse } from '../shared/interfaces';
 
 export const badRequest = (error: Error): HttpResponse => ({
   statusCode: 400,

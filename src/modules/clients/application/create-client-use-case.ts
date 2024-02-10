@@ -1,7 +1,7 @@
-import { Either } from 'src/shared/either';
+import { Either } from '../../../shared/either';
 import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
 import Client from '../domain/entities/client.entity';
-import { IRepository } from 'src/shared/interfaces';
+import { IRepository } from '../../../shared/interfaces';
 
 export class CreateClientUseCase {
   constructor(readonly clientRepository: IRepository) {}

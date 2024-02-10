@@ -60,7 +60,6 @@ export class PagerInterceptor implements NestInterceptor {
         response.paginationInfo.totalPages = Math.ceil(
           response.paginationInfo.totalItemsCount / size,
         );
-
         return response;
       }),
     );
