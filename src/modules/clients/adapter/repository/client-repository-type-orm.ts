@@ -21,6 +21,11 @@ export default class ClientRepositoryTypeORM
   ) {
     super(clientRepository);
   }
+  async edit(client): Promise<Either<Error, EntityClassOrSchema>> {
+    const result = await this.update(client.id, client);
+    if (!result) return left(Error('Cliente não encontrado'));
+    return right(result);
+  }
 
   async create(client): Promise<Either<Error, EntityClassOrSchema>> {
     const result = await this.save(client);
@@ -37,14 +42,7 @@ export default class ClientRepositoryTypeORM
       this.ormQueryBuilder.buildGetAllQuery(clientFilter),
       clientFilter.pagination,
     );
-    if (!clients) return left(Error('Erro na busca'));
+    if (!clients) return left(Error('Erro ao buscar clientes'));
     return right(clients);
-  }
-
-  updateClient(): Client {
-    throw new Error('Method not implemented.');
-  }
-  getClientById(): Client {
-    throw new Error('Method not implemented.');
   }
 }

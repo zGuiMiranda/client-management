@@ -47,6 +47,7 @@
     "typeorm": "^0.3.20"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",
@@ -72,6 +73,9 @@
     "typescript": "^5.1.3"
   },
   "jest": {
+    "setupFilesAfterEnv": [
+      "<rootDir>/../test/setupTests.ts"
+    ],
     "moduleFileExtensions": [
       "js",
       "json",

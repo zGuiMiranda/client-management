@@ -6,22 +6,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import Client from './domain/entities/client.entity';
 import { CreateClientUseCase } from './application/create-client-use-case';
 import { IRepository } from '../../shared/interfaces';
-import { ORMQuerySymbolBuilder } from '../../shared/typeorm/orm-query-symbol-builder';
-import { ORMQueryBuilder } from '../../shared/typeorm/orm-query-builder';
+import { EditClientUseCase } from './application/edit-client-use-case';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Client])],
   controllers: [ClientsController],
   providers: [
     ClientRepositoryTypeORM,
-    {
-      provide: 'QuerySymbolBuilder',
-      useClass: ORMQuerySymbolBuilder,
-    },
-    {
-      provide: 'QueryBuilder',
-      useClass: ORMQueryBuilder,
-    },
     {
       provide: FindAllClientsUseCase,
       useFactory: (routeRepo: IRepository) => {
@@ -33,6 +24,13 @@ import { ORMQueryBuilder } from '../../shared/typeorm/orm-query-builder';
       provide: CreateClientUseCase,
       useFactory: (routeRepo: IRepository) => {
         return new CreateClientUseCase(routeRepo);
+      },
+      inject: [ClientRepositoryTypeORM],
+    },
+    {
+      provide: EditClientUseCase,
+      useFactory: (routeRepo: IRepository) => {
+        return new EditClientUseCase(routeRepo);
       },
       inject: [ClientRepositoryTypeORM],
     },

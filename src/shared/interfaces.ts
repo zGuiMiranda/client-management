@@ -3,7 +3,7 @@ import { Either } from './either';
 
 export interface HttpResponse {
   statusCode: number;
-  body: any;
+  data: any;
 }
 
 export interface HttpRequest {
@@ -25,4 +25,10 @@ export interface IRepository {
     Either<Error, EntityClassOrSchema[] | [EntityClassOrSchema[], number]>
   >;
   create(data): Promise<Either<Error, EntityClassOrSchema>>;
+  edit(data): Promise<Either<Error, EntityClassOrSchema>>;
+}
+
+export interface IRandomValuesGenerator {
+  generateFullMaleName(): string;
+  generateFullFemaleName(): string;
 }

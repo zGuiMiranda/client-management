@@ -1,72 +1,56 @@
 import * as request from 'supertest';
-import { Test } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
-import { ClientModule } from './client.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { join } from 'path';
+import { app } from '../../../test/setupTests';
+import { faker } from '@faker-js/faker';
 
-const ENV = process.env.NODE_ENV;
+let clientId: string;
+
+beforeEach(async () => {
+  return request(app.getHttpServer())
+    .post('/clients/create')
+    .send(buildClientValues())
+    .expect(201)
+    .expect(
+      ({
+        body: {
+          data: { id },
+        },
+      }: {
+        body: { data: { id: string } };
+      }) => {
+        clientId = id;
+        return expect(id).not.toBeNull();
+      },
+    );
+});
+
+const buildClientValues = () => {
+  return {
+    father_name: faker.person.firstName('male') + faker.person.lastName('male'),
+    name: faker.person.firstName('male') + faker.person.lastName('male'),
+    mother_name:
+      faker.person.firstName('female') + faker.person.lastName('female'),
+    phone: faker.helpers.fromRegExp('+55 (11) ##### ####'),
+  };
+};
+
 describe('Clients', () => {
-  let app: INestApplication;
-
-  beforeAll(async () => {
-    const moduleRef = await Test.createTestingModule({
-      imports: [
-        ConfigModule.forRoot({
-          isGlobal: true,
-          envFilePath: !ENV ? '.env' : `.env.${ENV}`,
-        }),
-        TypeOrmModule.forRootAsync({
-          imports: [ConfigModule],
-          useFactory: (configService: ConfigService) => ({
-            type: 'postgres',
-            host: configService.get<string>('HOST'),
-            port: parseInt(configService.get<string>('DATABASE_PORT')),
-            username: configService.get<string>('USER'),
-            password: configService.get<string>('PASSWORD'),
-            database: configService.get<string>('DATABASE_NAME'),
-            entities: [join(__dirname, '**', '*.entity.{ts,js}')],
-            migrations: ['dist/migrations/*.js'],
-            autoLoadEntities: true,
-            synchronize: false,
-          }),
-          inject: [ConfigService],
-        }),
-        ClientModule,
-      ],
-    }).compile();
-
-    app = moduleRef.createNestApplication();
-    await app.init();
-  });
-
   it(`/GET find all clients without pagination`, () => {
     return request(app.getHttpServer()).get('/clients/findAll').expect(200);
   });
-
-  it(`/POST create client`, () => {
+  it(`/PUT edit client`, () => {
+    const client = buildClientValues();
     return request(app.getHttpServer())
-      .post('/clients/create')
+      .put('/clients/edit')
       .send({
-        father_name: 'teste pai client',
-        name: 'teste client 3',
-        mother_name: 'teste mãe client',
-        phone: '+55 (11) 980850298',
+        id: clientId,
+        ...client,
       })
-      .expect(201)
-      .expect(
-        ({
-          body: {
-            body: { id },
-          },
-        }: {
-          body: { body: { id: string } };
-        }) => expect(id).not.toBeNull(),
-      );
-  });
-
-  afterAll(async () => {
-    await app.close();
+      .expect(200)
+      .expect(({ body }) => {
+        const { data } = body;
+        expect(data.name).toBe(client.name);
+        expect(data.father_name).toBe(client.father_name);
+        expect(data.mother_name).toBe(client.mother_name);
+      });
   });
 });

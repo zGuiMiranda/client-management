@@ -1,4 +1,5 @@
 import {
+  Global,
   MiddlewareConsumer,
   Module,
   NestModule,
@@ -10,9 +11,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { join } from 'path';
 import { PagerMiddleware } from './shared/middleware/pager.middleware';
 import { ORMQuerySymbolBuilder } from './shared/typeorm/orm-query-symbol-builder';
+import { ORMQueryBuilder } from './shared/typeorm/orm-query-builder';
 
 const ENV = process.env.NODE_ENV;
-
+@Global()
 @Module({
   imports: [
     ClientModule,
@@ -20,7 +22,7 @@ const ENV = process.env.NODE_ENV;
       isGlobal: true,
       envFilePath: !ENV ? '.env' : `.env.${ENV}`,
     }),
-    ORMQuerySymbolBuilder,
+
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -38,6 +40,17 @@ const ENV = process.env.NODE_ENV;
       inject: [ConfigService],
     }),
   ],
+  providers: [
+    {
+      provide: 'QuerySymbolBuilder',
+      useClass: ORMQuerySymbolBuilder,
+    },
+    {
+      provide: 'QueryBuilder',
+      useClass: ORMQueryBuilder,
+    },
+  ],
+  exports: ['QueryBuilder', 'QuerySymbolBuilder'],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

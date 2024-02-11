@@ -5,23 +5,27 @@ import {
   Controller,
   Get,
   Post,
+  Put,
   Query,
   UseInterceptors,
 } from '@nestjs/common';
 import { badRequest, ok, serverError } from '../../helpers/http-helper';
 import { HttpResponse } from '../../shared/interfaces';
 import { CreateClientUseCase } from './application/create-client-use-case';
-import { CreateClientDto } from './domain/dto/cliente-dto';
+import { CreateClientDto } from './domain/dto/create-cliente-dto';
 import { plainToClass } from 'class-transformer';
 import Client from './domain/entities/client.entity';
 import { Pagination } from '../../shared/pagination';
 import { PagerInterceptor } from '../../shared/interceptors/pager.interceptor';
+import { EditClientUseCase } from './application/edit-client-use-case';
+import { EditClientDto } from './domain/dto/edit-client-dto';
 
 @Controller('clients')
 export class ClientsController {
   constructor(
     private findAllClientsUseCase: FindAllClientsUseCase,
     private createClientUseCase: CreateClientUseCase,
+    private editClientUseCase: EditClientUseCase,
   ) {}
 
   @UseInterceptors(PagerInterceptor)
@@ -77,6 +81,22 @@ export class ClientsController {
     try {
       const response = await this.createClientUseCase.execute(
         plainToClass(Client, createClientDto),
+      );
+      if (response.isLeft())
+        return badRequest(Error(response?.value?.toString()));
+
+      return ok(response.value);
+    } catch (error) {
+      return serverError('Erro ao procurar os clientes' + error);
+    }
+  }
+  @Put('edit')
+  async updateClient(
+    @Body() editClientDto: EditClientDto,
+  ): Promise<HttpResponse> {
+    try {
+      const response = await this.editClientUseCase.execute(
+        plainToClass(Client, editClientDto),
       );
       if (response.isLeft())
         return badRequest(Error(response?.value?.toString()));

@@ -1,4 +1,3 @@
-//import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
 import { Repository } from 'typeorm';
@@ -23,7 +22,16 @@ export class AbstractRepository {
       : this.repository.find(filters);
   }
 
+  async findOne(id) {
+    return this.repository.findOneBy(id);
+  }
+
   async save(data: EntityClassOrSchema) {
     return this.repository.save(data);
+  }
+
+  async update(id: string, data: EntityClassOrSchema) {
+    await this.repository.update(id, data);
+    return this.findOne({ id });
   }
 }
