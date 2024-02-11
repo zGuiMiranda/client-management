@@ -1,0 +1,14 @@
+{
+  "out": "./src/db/migrations",
+  "schema": "./src/db/schema.ts",
+  "breakpoints": true,
+  "driver": "pg",
+  "include": ["src/**/*.ts"],
+  "dbCredentials": {
+    "database": "pay-management",
+    "host": "localhost",
+    "port": 5433,
+    "user": "postgres",
+    "password": "!zd1"
+  }
+}
