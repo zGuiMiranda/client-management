@@ -26,6 +26,8 @@ export interface IRepository {
   >;
   create(data): Promise<Either<Error, EntityClassOrSchema>>;
   edit(data): Promise<Either<Error, EntityClassOrSchema>>;
+  findById(id: string): Promise<Either<Error, EntityClassOrSchema>>;
+  delete(ids: string[]): Promise<Either<Error, EntityClassOrSchema>>;
 }
 
 export interface IRandomValuesGenerator {

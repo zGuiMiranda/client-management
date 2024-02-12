@@ -37,6 +37,18 @@ describe('Clients', () => {
   it(`/GET find all clients without pagination`, () => {
     return request(app.getHttpServer()).get('/clients/findAll').expect(200);
   });
+  it(`/GET find all clients with pagination`, () => {
+    return request(app.getHttpServer())
+      .get('/clients/findAll')
+      .query({ page: 1, size: 1 })
+      .expect(200);
+  });
+  it(`/GET find one client by id`, () => {
+    return request(app.getHttpServer())
+      .get('/clients/findById')
+      .query({ clientId })
+      .expect(200);
+  });
   it(`/PUT edit client`, () => {
     const client = buildClientValues();
     return request(app.getHttpServer())

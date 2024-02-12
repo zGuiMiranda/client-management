@@ -19,6 +19,8 @@ import { Pagination } from '../../shared/pagination';
 import { PagerInterceptor } from '../../shared/interceptors/pager.interceptor';
 import { EditClientUseCase } from './application/edit-client-use-case';
 import { EditClientDto } from './domain/dto/edit-client-dto';
+import { FindClientByIdDto } from './domain/dto/find-client-by-id-dto';
+import { FindClientByIdUseCase } from './application/find-client-by-id';
 
 @Controller('clients')
 export class ClientsController {
@@ -26,6 +28,7 @@ export class ClientsController {
     private findAllClientsUseCase: FindAllClientsUseCase,
     private createClientUseCase: CreateClientUseCase,
     private editClientUseCase: EditClientUseCase,
+    private findClientByIdUseCase: FindClientByIdUseCase,
   ) {}
 
   @UseInterceptors(PagerInterceptor)
@@ -87,7 +90,7 @@ export class ClientsController {
 
       return ok(response.value);
     } catch (error) {
-      return serverError('Erro ao procurar os clientes' + error);
+      return serverError('Erro ao criar cliente' + error);
     }
   }
   @Put('edit')
@@ -103,7 +106,22 @@ export class ClientsController {
 
       return ok(response.value);
     } catch (error) {
-      return serverError('Erro ao procurar os clientes' + error);
+      return serverError('Erro ao editar o cliente' + error);
+    }
+  }
+  @Get('findById')
+  async findClientById(
+    @Query() findClientById: FindClientByIdDto,
+  ): Promise<HttpResponse> {
+    try {
+      const response = await this.findClientByIdUseCase.execute(
+        findClientById.id,
+      );
+      if (response.isLeft())
+        return badRequest(Error(response?.value?.toString()));
+      return ok(response.value);
+    } catch (error) {
+      return serverError('Erro ao procurar o cliente' + error);
     }
   }
 }
