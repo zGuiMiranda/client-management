@@ -21,6 +21,14 @@ export default class ClientRepositoryTypeORM
   ) {
     super(clientRepository);
   }
+  async findById(id: string): Promise<Either<Error, EntityClassOrSchema>> {
+    const result = await this.findOneById({ id });
+    if (!result) return left(Error('Cliente não encontrado'));
+    return right(result);
+  }
+  async delete(ids: string[]): Promise<Either<Error, EntityClassOrSchema>> {
+    throw new Error('Method not implemented.');
+  }
   async edit(client): Promise<Either<Error, EntityClassOrSchema>> {
     const result = await this.update(client.id, client);
     if (!result) return left(Error('Cliente não encontrado'));

@@ -10,8 +10,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { join } from 'path';
 import { PagerMiddleware } from './shared/middleware/pager.middleware';
-import { ORMQuerySymbolBuilder } from './shared/typeorm/orm-query-symbol-builder';
-import { ORMQueryBuilder } from './shared/typeorm/orm-query-builder';
+import { ORMQuerySymbolBuilder } from './modules/clients/typeorm/orm-query-symbol-builder';
+import { ORMQueryBuilder } from './modules/clients/typeorm/orm-query-builder';
 
 const ENV = process.env.NODE_ENV;
 @Global()

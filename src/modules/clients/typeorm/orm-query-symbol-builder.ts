@@ -1,5 +1,5 @@
 import { Like } from 'typeorm';
-import { IQuerySymbolBuilder } from '../interfaces';
+import { IQuerySymbolBuilder } from '../../../shared/interfaces';
 
 export class ORMQuerySymbolBuilder implements IQuerySymbolBuilder {
   like(value) {
