@@ -5,6 +5,7 @@ import {
   CallHandler,
 } from '@nestjs/common';
 import { Observable, map } from 'rxjs';
+import { PaginationInfo } from '../interfaces';
 
 @Injectable()
 export class PagerInterceptor implements NestInterceptor {
@@ -23,15 +24,7 @@ export class PagerInterceptor implements NestInterceptor {
       map((flow: any) => {
         const response: {
           data: any;
-          paginationInfo: {
-            hasNextPage: boolean;
-            currentPage: number;
-            previousPage: number | null;
-            nextPage: number;
-            totalItemsCount: number;
-            totalItensReturnedForActualPageCount: number;
-            totalPages: number;
-          };
+          paginationInfo: PaginationInfo;
         } = {
           data: [],
           paginationInfo: {
@@ -45,8 +38,8 @@ export class PagerInterceptor implements NestInterceptor {
           },
         };
 
-        response.paginationInfo.totalItemsCount = flow?.body?.[1];
-        response.data = flow?.body?.[0];
+        response.paginationInfo.totalItemsCount = flow?.data?.[1];
+        response.data = flow?.data?.[0];
         response.paginationInfo.currentPage = page;
         response.paginationInfo.nextPage =
           response.paginationInfo.totalItemsCount > page * size

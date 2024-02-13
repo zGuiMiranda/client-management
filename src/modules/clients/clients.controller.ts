@@ -3,6 +3,7 @@ import { FindAllClientsUseCase } from './application/find-all-clients-use-case';
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Post,
   Put,
@@ -20,7 +21,9 @@ import { PagerInterceptor } from '../../shared/interceptors/pager.interceptor';
 import { EditClientUseCase } from './application/edit-client-use-case';
 import { EditClientDto } from './domain/dto/edit-client-dto';
 import { FindClientByIdDto } from './domain/dto/find-client-by-id-dto';
-import { FindClientByIdUseCase } from './application/find-client-by-id';
+import { FindClientByIdUseCase } from './application/find-client-by-id-use-case';
+import { DeleteClientUseCase } from './application/delete-client-use-case';
+import { DeleteClientDto } from './domain/dto/delete-client-dto';
 
 @Controller('clients')
 export class ClientsController {
@@ -29,6 +32,7 @@ export class ClientsController {
     private createClientUseCase: CreateClientUseCase,
     private editClientUseCase: EditClientUseCase,
     private findClientByIdUseCase: FindClientByIdUseCase,
+    private deleteClientUseCase: DeleteClientUseCase,
   ) {}
 
   @UseInterceptors(PagerInterceptor)
@@ -73,7 +77,7 @@ export class ClientsController {
 
       return ok(response.value);
     } catch (error) {
-      return serverError('Erro ao procurar os clientes' + error);
+      return serverError('Erro ao procurar clientes' + error);
     }
   }
 
@@ -106,7 +110,7 @@ export class ClientsController {
 
       return ok(response.value);
     } catch (error) {
-      return serverError('Erro ao editar o cliente' + error);
+      return serverError('Erro ao editar cliente' + error);
     }
   }
   @Get('findById')
@@ -121,7 +125,23 @@ export class ClientsController {
         return badRequest(Error(response?.value?.toString()));
       return ok(response.value);
     } catch (error) {
-      return serverError('Erro ao procurar o cliente' + error);
+      return serverError('Erro ao procurar cliente' + error);
+    }
+  }
+
+  @Delete('delete')
+  async delete(
+    @Query() deleteClientDto: DeleteClientDto,
+  ): Promise<HttpResponse> {
+    try {
+      const response = await this.deleteClientUseCase.execute(
+        deleteClientDto.ids,
+      );
+      if (response.isLeft())
+        return badRequest(Error(response?.value?.toString()));
+      return ok(response.value);
+    } catch (error) {
+      return serverError('Erro ao procurar cliente' + error);
     }
   }
 }
