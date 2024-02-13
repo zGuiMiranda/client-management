@@ -23,7 +23,6 @@ export class AbstractRepository {
   }
 
   async findOneById(id) {
-    console.log(id, 'nvvnhv');
     return this.repository.findOneBy(id);
   }
 
@@ -34,5 +33,9 @@ export class AbstractRepository {
   async update(id: string, data: EntityClassOrSchema) {
     await this.repository.update(id, data);
     return this.findOneById({ id });
+  }
+
+  async deleteById(ids: string[]) {
+    return this.repository.delete(ids);
   }
 }

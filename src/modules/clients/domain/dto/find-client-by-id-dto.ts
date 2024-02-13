@@ -1,7 +1,6 @@
-import { Exclude, Expose } from 'class-transformer';
+import { Expose } from 'class-transformer';
 import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
-@Exclude()
 export class FindClientByIdDto {
   @Expose()
   @IsString({ always: true, message: 'O ID é inválido' })

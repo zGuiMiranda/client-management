@@ -1,5 +1,6 @@
 import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
 import { Either } from './either';
+import { DeleteResult } from 'typeorm';
 
 export interface HttpResponse {
   statusCode: number;
@@ -27,10 +28,20 @@ export interface IRepository {
   create(data): Promise<Either<Error, EntityClassOrSchema>>;
   edit(data): Promise<Either<Error, EntityClassOrSchema>>;
   findById(id: string): Promise<Either<Error, EntityClassOrSchema>>;
-  delete(ids: string[]): Promise<Either<Error, EntityClassOrSchema>>;
+  delete(ids: string[]): Promise<Either<Error, DeleteResult>>;
 }
 
 export interface IRandomValuesGenerator {
   generateFullMaleName(): string;
   generateFullFemaleName(): string;
+}
+
+export interface PaginationInfo {
+  hasNextPage: boolean;
+  currentPage: number;
+  previousPage: number | null;
+  nextPage: number;
+  totalItemsCount: number;
+  totalItensReturnedForActualPageCount: number;
+  totalPages: number;
 }

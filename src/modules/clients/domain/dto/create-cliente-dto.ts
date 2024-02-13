@@ -1,7 +1,6 @@
-import { Exclude, Expose } from 'class-transformer';
+import { Expose } from 'class-transformer';
 import { IsNotEmpty, IsPhoneNumber, IsString } from 'class-validator';
 
-@Exclude()
 export class CreateClientDto {
   @Expose()
   @IsString({ always: true, message: 'O nome é inválido' })

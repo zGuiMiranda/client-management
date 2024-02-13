@@ -7,7 +7,8 @@ import Client from './domain/entities/client.entity';
 import { CreateClientUseCase } from './application/create-client-use-case';
 import { IRepository } from '../../shared/interfaces';
 import { EditClientUseCase } from './application/edit-client-use-case';
-import { FindClientByIdUseCase } from './application/find-client-by-id';
+import { FindClientByIdUseCase } from './application/find-client-by-id-use-case';
+import { DeleteClientUseCase } from './application/delete-client-use-case';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Client])],
@@ -39,6 +40,13 @@ import { FindClientByIdUseCase } from './application/find-client-by-id';
       provide: FindClientByIdUseCase,
       useFactory: (routeRepo: IRepository) => {
         return new FindClientByIdUseCase(routeRepo);
+      },
+      inject: [ClientRepositoryTypeORM],
+    },
+    {
+      provide: DeleteClientUseCase,
+      useFactory: (routeRepo: IRepository) => {
+        return new DeleteClientUseCase(routeRepo);
       },
       inject: [ClientRepositoryTypeORM],
     },
