@@ -45,6 +45,14 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Migrations
+
+```bash
+# create migration
+$ npm run migration:create -n migration-name
+
+```
+
 ## Test
 
 ```bash

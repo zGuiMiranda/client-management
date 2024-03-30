@@ -13,6 +13,7 @@ export interface HttpRequest {
 
 export interface IQuerySymbolBuilder {
   like(value);
+  equals(value);
 }
 
 export interface IQueryBuilder {
@@ -44,4 +45,21 @@ export interface PaginationInfo {
   totalItemsCount: number;
   totalItensReturnedForActualPageCount: number;
   totalPages: number;
+}
+
+export interface IPasswordHasher {
+  hashPassword(
+    paswword: string,
+  ): Promise<Either<Error, { password: string; salt: Buffer }>>;
+  unhashPassword(paswword: string): Promise<Either<Error, string>>;
+  comparePasswords(
+    paswword: string,
+    iv: string,
+    dbPassword: string,
+  ): Either<Error, boolean>;
+}
+
+export interface ITokenMaker {
+  createToken(data): Either<Error, string>;
+  verifyToken(token): Either<Error, boolean>;
 }

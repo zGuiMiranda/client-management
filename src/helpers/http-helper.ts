@@ -5,6 +5,11 @@ export const badRequest = (error: Error): HttpResponse => ({
   data: error.message,
 });
 
+export const expiredToken = (error: Error): HttpResponse => ({
+  statusCode: 303,
+  data: error.message,
+});
+
 export const ok = (data: any): HttpResponse => ({
   statusCode: 200,
   data,

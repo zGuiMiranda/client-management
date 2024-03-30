@@ -4,10 +4,13 @@ import { faker } from '@faker-js/faker';
 import { PaginationInfo } from 'src/shared/interfaces';
 
 let clientId: string;
+const token =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6IjM1MS4yMjkuOTQwLTcyIiwicGFzc3dvcmQiOiIyNzhlOTc3MTgwMGQ0MmEyZGEyYWU4MDkwZmNmYjQ3ZCIsImlhdCI6MTcxMTgyMDk3OSwiZXhwIjoxNzExOTA3Mzc5fQ.LtUoRDyFm86ZTsAq2p6W8p-Ok8KrNx_qy2i9qCw0WAo';
 
 beforeEach(async () => {
   return request(app.getHttpServer())
     .post('/clients/create')
+    .set('authorization', token)
     .send(buildClientValues())
     .expect(201)
     .expect(
@@ -28,6 +31,8 @@ afterEach(() => {
   return request(app.getHttpServer())
     .delete('/clients/delete')
     .query({ ids: [clientId] })
+    .set('authorization', token)
+
     .expect(200);
 });
 
@@ -45,6 +50,8 @@ describe('Clients', () => {
   it(`/GET find all clients without pagination`, () => {
     return request(app.getHttpServer())
       .get('/clients/findAll')
+      .set('authorization', token)
+
       .expect(200)
       .expect(({ body: { data } }: { body: { data: { id: string }[] } }) => {
         expect(data).toHaveLength(1);
@@ -54,6 +61,8 @@ describe('Clients', () => {
   it(`/GET find all clients with pagination`, () => {
     return request(app.getHttpServer())
       .get('/clients/findAll')
+      .set('authorization', token)
+
       .query({ page: 1, size: 1 })
       .expect(200)
       .expect(
@@ -70,6 +79,8 @@ describe('Clients', () => {
   it(`/GET find one client by id`, () => {
     return request(app.getHttpServer())
       .get('/clients/findById')
+      .set('authorization', token)
+
       .query({ clientId })
       .expect(200)
       .expect(({ body }: { body: { data: { id: string } } }) => {
@@ -82,6 +93,8 @@ describe('Clients', () => {
     const client = buildClientValues();
     return request(app.getHttpServer())
       .put('/clients/edit')
+      .set('authorization', token)
+
       .send({
         id: clientId,
         ...client,
