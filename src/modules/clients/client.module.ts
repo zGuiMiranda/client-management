@@ -9,6 +9,7 @@ import { IRepository } from '../../shared/interfaces';
 import { EditClientUseCase } from './application/edit-client-use-case';
 import { FindClientByIdUseCase } from './application/find-client-by-id-use-case';
 import { DeleteClientUseCase } from './application/delete-client-use-case';
+import { ClientORMQueryBuilder } from './typeorm/client-orm-query-builder';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Client])],
@@ -49,6 +50,10 @@ import { DeleteClientUseCase } from './application/delete-client-use-case';
         return new DeleteClientUseCase(routeRepo);
       },
       inject: [ClientRepositoryTypeORM],
+    },
+    {
+      provide: 'QueryBuilder',
+      useClass: ClientORMQueryBuilder,
     },
   ],
 })

@@ -1,6 +1,6 @@
 import { Either } from '../../../shared/either';
 import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
-import { ClientFilter } from '../domain/filter/client-filter';
+import { ClientFilter } from '../domain/interfaces/client-filter';
 import { IRepository } from '../../../shared/interfaces';
 
 export class FindAllClientsUseCase {

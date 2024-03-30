@@ -5,7 +5,7 @@ import { DeleteResult, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AbstractRepository } from '../../../../shared/abstract-repository';
 import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
-import { ClientFilter } from '../../../clients/domain/filter/client-filter';
+import { ClientFilter } from '../../domain/interfaces/client-filter';
 import { IQueryBuilder, IRepository } from '../../../../shared/interfaces';
 
 @Injectable()
@@ -21,6 +21,7 @@ export default class ClientRepositoryTypeORM
   ) {
     super(clientRepository);
   }
+
   async findById(id: string): Promise<Either<Error, EntityClassOrSchema>> {
     const result = await this.findOneById({ id });
     if (!result) return left(Error('Cliente não encontrado'));

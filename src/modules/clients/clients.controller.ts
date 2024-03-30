@@ -1,4 +1,4 @@
-import { ClientFilter } from '../clients/domain/filter/client-filter';
+import { ClientFilter } from './domain/interfaces/client-filter';
 import { FindAllClientsUseCase } from './application/find-all-clients-use-case';
 import {
   Body,

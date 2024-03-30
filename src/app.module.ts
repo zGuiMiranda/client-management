@@ -10,14 +10,17 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { join } from 'path';
 import { PagerMiddleware } from './shared/middleware/pager.middleware';
-import { ORMQuerySymbolBuilder } from './modules/clients/typeorm/orm-query-symbol-builder';
-import { ORMQueryBuilder } from './modules/clients/typeorm/orm-query-builder';
+import { ORMQuerySymbolBuilder } from './shared/orm-query-symbol-builder';
+import { UsersModule } from './modules/users/users.module';
+import { AccessTokenMiddleware } from './shared/middleware/access-token.middleware';
+import JsonWebTokenMaker from './token/json-web-token';
 
 const ENV = process.env.NODE_ENV;
 @Global()
 @Module({
   imports: [
     ClientModule,
+    UsersModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: !ENV ? '.env' : `.env.${ENV}`,
@@ -46,16 +49,21 @@ const ENV = process.env.NODE_ENV;
       useClass: ORMQuerySymbolBuilder,
     },
     {
-      provide: 'QueryBuilder',
-      useClass: ORMQueryBuilder,
+      provide: 'TokenMaker',
+      useClass: JsonWebTokenMaker,
     },
   ],
-  exports: ['QueryBuilder', 'QuerySymbolBuilder'],
+  exports: ['QuerySymbolBuilder'],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(PagerMiddleware)
       .forRoutes({ path: '/clients/*', method: RequestMethod.GET });
+
+    consumer
+      .apply(AccessTokenMiddleware)
+      .exclude('/users/login')
+      .forRoutes({ path: '/*', method: RequestMethod.ALL });
   }
 }
