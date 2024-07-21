@@ -39,7 +39,9 @@ export default class UsersRepositoryTypeORM
   findById(id: string): Promise<Either<Error, EntityClassOrSchema>> {
     throw new Error('Method not implemented.');
   }
-  delete(ids: string[]): Promise<Either<Error, DeleteResult>> {
-    throw new Error('Method not implemented.');
+  async delete(ids: string[]): Promise<Either<Error, DeleteResult>> {
+    const result = await this.deleteById(ids);
+    if (!result) return left(Error('Usuário não encontrado'));
+    return right(result);
   }
 }

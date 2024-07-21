@@ -1,6 +1,6 @@
 import { Inject } from '@nestjs/common';
-import { ClientQueryInterface } from 'src/modules/clients/domain/interfaces/client-query-interfaces';
-import { ClientFilter } from '../domain/interfaces/client-filter';
+import { ClientQueryInterface } from 'src/modules/clients/interfaces/client-query-interfaces';
+import { ClientFilter } from '../interfaces/client-filter';
 import { IQueryBuilder, IQuerySymbolBuilder } from '../../../shared/interfaces';
 
 export class ClientORMQueryBuilder implements IQueryBuilder {

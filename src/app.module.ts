@@ -63,7 +63,7 @@ export class AppModule implements NestModule {
 
     consumer
       .apply(AccessTokenMiddleware)
-      .exclude('/users/login')
+      .exclude('/users/(.*)')
       .forRoutes({ path: '/*', method: RequestMethod.ALL });
   }
 }

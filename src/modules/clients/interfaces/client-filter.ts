@@ -1,4 +1,4 @@
-import { Pagination } from '../../../../shared/pagination';
+import { Pagination } from '../../../shared/pagination';
 
 export class ClientFilter {
   name: string | null;

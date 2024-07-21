@@ -20,7 +20,6 @@ export class PasswordHasher implements IPasswordHasher {
         cipher.update(password),
         cipher.final(),
       ]);
-
       return right(encrypted.toString('hex') === dbPassword);
     } catch (e) {
       return left(Error('Problema ao hashear senha. ' + e));
@@ -40,7 +39,6 @@ export class PasswordHasher implements IPasswordHasher {
         cipher.update(password),
         cipher.final(),
       ]);
-
       return right({ password: encrypted.toString('hex'), salt: iv });
     } catch (e) {
       return left(Error('Problema ao hashear senha. ' + e));

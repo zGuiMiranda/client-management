@@ -29,7 +29,8 @@ export class LoginUseCase {
       Buffer.from(userResponse?.value?.[0].salt, 'hex'),
       userResponse?.value?.[0].password,
     );
-    if (!isPasswordsEqual) return left(Error('Usuário ou senha inválidos'));
+    if (!isPasswordsEqual.value)
+      return left(Error('Usuário ou senha inválidos'));
 
     return this.tokenMaker.createToken(userResponse?.value?.[0]);
   }
