@@ -10,6 +10,7 @@ import { PasswordHasher } from '../../shared/password-hasher';
 import { LoginUseCase } from './application/login-use-case';
 import { UserORMQueryBuilder } from './typeorm/user-orm-query-builder';
 import JsonWebTokenMaker from '../../token/json-web-token';
+import { DeleteUserUseCase } from './application/delete-user-use-case';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
@@ -42,6 +43,13 @@ import JsonWebTokenMaker from '../../token/json-web-token';
         JsonWebTokenMaker,
         UserORMQueryBuilder,
       ],
+    },
+    {
+      provide: DeleteUserUseCase,
+      useFactory: (routeRepo: IRepository, user: User) => {
+        return new DeleteUserUseCase(routeRepo, user);
+      },
+      inject: [UsersRepositoryTypeORM, User],
     },
     {
       provide: 'PasswordHasher',

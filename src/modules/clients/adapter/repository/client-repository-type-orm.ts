@@ -5,7 +5,7 @@ import { DeleteResult, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AbstractRepository } from '../../../../shared/abstract-repository';
 import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
-import { ClientFilter } from '../../domain/interfaces/client-filter';
+import { ClientFilter } from '../../interfaces/client-filter';
 import { IQueryBuilder, IRepository } from '../../../../shared/interfaces';
 
 @Injectable()

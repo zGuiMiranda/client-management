@@ -2,10 +2,24 @@ import * as request from 'supertest';
 import { app } from '../../../test/setupTests';
 import { faker } from '@faker-js/faker';
 import { PaginationInfo } from 'src/shared/interfaces';
+import {
+  login,
+  deleteUser,
+  createUserAndGetId,
+} from '../users/users.controller.spec';
 
 let clientId: string;
-const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6IjM1MS4yMjkuOTQwLTcyIiwicGFzc3dvcmQiOiIyNzhlOTc3MTgwMGQ0MmEyZGEyYWU4MDkwZmNmYjQ3ZCIsImlhdCI6MTcxMTgyMDk3OSwiZXhwIjoxNzExOTA3Mzc5fQ.LtUoRDyFm86ZTsAq2p6W8p-Ok8KrNx_qy2i9qCw0WAo';
+let userId: string;
+let token: string;
+
+beforeAll(async () => {
+  userId = await createUserAndGetId();
+  token = (await login()).body.data;
+});
+
+afterAll(async () => {
+  deleteUser(userId);
+});
 
 beforeEach(async () => {
   return request(app.getHttpServer())
@@ -51,7 +65,6 @@ describe('Clients', () => {
     return request(app.getHttpServer())
       .get('/clients/findAll')
       .set('authorization', token)
-
       .expect(200)
       .expect(({ body: { data } }: { body: { data: { id: string }[] } }) => {
         expect(data).toHaveLength(1);
@@ -62,7 +75,6 @@ describe('Clients', () => {
     return request(app.getHttpServer())
       .get('/clients/findAll')
       .set('authorization', token)
-
       .query({ page: 1, size: 1 })
       .expect(200)
       .expect(
@@ -80,7 +92,6 @@ describe('Clients', () => {
     return request(app.getHttpServer())
       .get('/clients/findById')
       .set('authorization', token)
-
       .query({ clientId })
       .expect(200)
       .expect(({ body }: { body: { data: { id: string } } }) => {
@@ -94,7 +105,6 @@ describe('Clients', () => {
     return request(app.getHttpServer())
       .put('/clients/edit')
       .set('authorization', token)
-
       .send({
         id: clientId,
         ...client,
