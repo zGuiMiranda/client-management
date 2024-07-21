@@ -16,20 +16,22 @@ $ npm install
 
 ```bash
 # development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+$ yarn dev
 ```
 
 ## Migrations
 
 ```bash
 # create migration
-$ npm run migration:create -n migration-name
-$ npm dev:migration:run
+$ yarn migration:create -n migration-name
+$ yarn dev:migration:run
+
+```
+
+## Tests
+
+```bash
+# create migration
+$ yarn test
 
 ```
